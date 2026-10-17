@@ -17,18 +17,14 @@ def classify_triangle(a, b, c) -> str:
 
     x, y, z = sorted((a, b, c))
 
-    if math.isclose(x, y, rel_tol=1e-9, abs_tol=1e-9) and math.isclose(y, z, rel_tol=1e-9, abs_tol=1e-9):
+    if x == y == z:
         base_type = "Equilateral"
-    elif (
-        math.isclose(x, y, rel_tol=1e-9, abs_tol=1e-9)
-        or math.isclose(y, z, rel_tol=1e-9, abs_tol=1e-9)
-        or math.isclose(x, z, rel_tol=1e-9, abs_tol=1e-9)
-    ):
+    elif x == y or y == z:
         base_type = "Isosceles"
     else:
         base_type = "Scalene"
 
-    is_right = math.isclose(x * x + y * y, z * z, rel_tol=1e-9, abs_tol=1e-9)
+    is_right = math.isclose(math.hypot(x, y), z, rel_tol=1e-9, abs_tol=0.0)
 
     if is_right and base_type != "Equilateral":
         return f"Right {base_type}"

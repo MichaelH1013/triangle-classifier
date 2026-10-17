@@ -17,7 +17,8 @@ This project determines whether three side lengths form a valid triangle, classi
 - Valid equilateral: all three sides are equal, e.g. (4, 4, 4)
 - Valid isosceles: exactly two sides are equal, e.g. (5, 5, 6)
 - Valid scalene: all three sides differ, e.g. (2, 3, 4)
-- Valid right triangle: satisfies a^2 + b^2 = c^2 within a tolerance, e.g. (3, 4, 5)
+- Side-classification boundary: equal sides are compared exactly; near-but-distinct values such as (1, 1 + 1e-10, 1 + 2e-10) remain scalene
+- Valid right triangle: satisfies a^2 + b^2 = c^2 within a relative tolerance, e.g. (3, 4, 5)
 - Right isosceles with non-integer hypotenuse: (5, 5, 5 * sqrt(2)); this catches floating-point comparisons that use == instead of a tolerance
 
 ## Why an equilateral triangle can never be right
