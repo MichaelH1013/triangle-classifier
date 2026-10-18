@@ -46,7 +46,7 @@ What I used it for: drafting the unit tests in test_triangle.py.
 What I verified: I checked each suggested test against the spec table, not against what my code returned. I changed the right-triangle test to use math.isclose instead of ==.
 
 Tool 2: Claude (AI assistant from Anthropic)
-What I used it for: checking my project against the assignment requirements, rewriting the acceptance criteria and test_acceptance.py, and simplifying this README.
+What I used it for: checking my project against the assignment requirements, rewriting the acceptance criteria and test_acceptance.py, simplifying this README, and using Claude's agent tool to add the Markdown formatting to this README and to review my code.
 What I verified: I ran all the tests myself and they pass.
 
 No other AI tool used.
