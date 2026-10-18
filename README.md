@@ -1,51 +1,52 @@
 # Triangle Classification Project
 
-This project determines whether three side lengths form a valid triangle, classifies the triangle shape, and flags right triangles for reinforcement.
+This program checks if three side lengths make a valid triangle, tells what kind of triangle it is, and flags right triangles.
 
 ## How to run the tests
 
-1. Create or activate a Python environment.
-2. Install dependencies:
+1. Install pytest:
    python -m pip install -r requirements.txt
-3. Run the test suite:
-   python -m pytest -q
+2. Run the tests:
+   python -m pytest
 
-## Equivalence classes and boundaries identified
+## Equivalence classes and boundaries
 
-- Invalid inputs: any side length <= 0
-- Invalid degenerate case: the sum of two sides equals the third side, e.g. (1, 2, 3)
-- Valid equilateral: all three sides are equal, e.g. (4, 4, 4)
-- Valid isosceles: exactly two sides are equal, e.g. (5, 5, 6)
-- Valid scalene: all three sides differ, e.g. (2, 3, 4)
-- Side-classification boundary: equal sides are compared exactly; near-but-distinct values such as (1, 1 + 1e-10, 1 + 2e-10) remain scalene
-- Valid right triangle: satisfies a^2 + b^2 = c^2 within a relative tolerance, e.g. (3, 4, 5)
-- Right isosceles with non-integer hypotenuse: (5, 5, 5 * sqrt(2)); this catches floating-point comparisons that use == instead of a tolerance
+- Invalid: any side that is 0 or less, for example (0, 3, 4)
+- Invalid (boundary): two sides add up to exactly the third side, for example (1, 2, 3)
+- Equilateral: all three sides are equal, for example (4, 4, 4)
+- Isosceles: exactly two sides are equal, for example (5, 5, 6)
+- Scalene: all three sides are different, for example (2, 3, 4)
+- Right triangle: a squared + b squared = c squared, for example (3, 4, 5)
+- Right isosceles with a decimal side: (5, 5, 5 * sqrt(2))
 
 ## Why an equilateral triangle can never be right
 
-An equilateral triangle has three equal sides, which means each interior angle is 60 degrees. A right triangle must have one 90-degree angle, so an equilateral triangle cannot also be right.
+All three angles in an equilateral triangle are 60 degrees. A right triangle needs one 90 degree angle, so it can't be both.
 
 ## Copilot Review Log
 
 | Test | Copilot-suggested? | Kept / edited / rejected | Why |
 | --- | --- | --- | --- |
-| test_right_triangle | Yes | Edited | Copilot originally asserted with ==; changed it to math.isclose because the spec requires a tolerance-based right-triangle check. |
-| test_right_isosceles_triangle_with_non_integer_hypotenuse | Yes | Kept | The test matches the specification and guards against floating-point equality mistakes. |
-| test_degenerate_boundary_case_is_invalid | Yes | Kept | This matches the boundary condition exactly: a + b == c is invalid. |
+| test_right_scalene_triangle | Yes | Edited | Copilot used ==, but decimals can be slightly off, so I changed it to math.isclose. |
+| test_right_isosceles_triangle_with_non_integer_hypotenuse | Yes | Kept | It matches the spec and tests a right triangle with a decimal side. |
+| test_degenerate_boundary_case_is_invalid | Yes | Kept | The spec says two sides adding up to the third side is invalid, and this test checks that. |
 
 ## Acceptance criteria
 
-1. For any three side lengths entered, the classifier must return either a valid triangle classification or "Invalid" without crashing.
-2. A valid right triangle must be labeled with the prefix "Right " and marked as buildable for reinforcement checks.
-3. If the triangle is invalid or degenerate, the result must be "Invalid" and not misclassify the shape.
+The customer wants to enter three side lengths and be told the shape and whether it can be built. Invalid triangles should show a message and not crash. Right triangles should be flagged for reinforced corners. "Buildable" here means the result is not "Invalid".
+
+1. A valid right triangle like (3, 4, 5) returns a result that starts with "Right " (here, "Right Scalene").
+2. An invalid triangle (a side of 0 or less, or two sides that add up to the third, like (1, 2, 3)) returns exactly "Invalid" and does not raise an error.
+3. A valid triangle that is not right returns exactly "Equilateral", "Isosceles", or "Scalene" with no "Right " prefix.
 
 ## AI-use disclosure
 
-Tool: GitHub Copilot (IDE autocomplete)
-What used for: drafting the initial test ideas and checking whether the generated assertions matched the specification.
-What verified: each suggestion was checked against the assignment requirements; the right-triangle test was edited to use math.isclose instead of exact equality.
+Tool 1: GitHub Copilot (autocomplete in my IDE)
+What I used it for: drafting the unit tests in test_triangle.py.
+What I verified: I checked each suggested test against the spec table, not against what my code returned. I changed the right-triangle test to use math.isclose instead of ==.
+
+Tool 2: Claude (AI assistant from Anthropic)
+What I used it for: checking my project against the assignment requirements, rewriting the acceptance criteria and test_acceptance.py, and simplifying this README.
+What I verified: I ran all the tests myself and they pass.
+
 No other AI tool used.
-
-## Acceptance test summary
-
-The acceptance test calls classify_triangle() end-to-end and verifies the required customer-facing behavior for valid right triangles, invalid triangles, and valid non-right triangles.

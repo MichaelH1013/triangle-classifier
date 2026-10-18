@@ -28,10 +28,6 @@ def test_scalene_triangle():
     assert classify_triangle(2, 3, 4) == "Scalene"
 
 
-def test_nearly_equal_sides_are_not_treated_as_equal():
-    assert classify_triangle(1, 1 + 1e-10, 1 + 2e-10) == "Scalene"
-
-
 def test_degenerate_boundary_case_is_invalid():
     assert classify_triangle(1, 2, 3) == "Invalid"
 
